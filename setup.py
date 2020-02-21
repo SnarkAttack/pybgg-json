@@ -8,7 +8,7 @@ setuptools.setup(
     version="0.0.1",
     author="Patrick McQuay",
     author_email="patrick.mcquay@gmail.com",
-    description="Python package to wrap BoardGameGeek XML API2 calls and produce json results",
+    description="Python package to wrap BoardGameGeek XML API2 calls and produce JSON results",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/SnarkAttack/pybgg-json",
