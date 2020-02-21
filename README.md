@@ -1,6 +1,6 @@
 # pybgg-json
 
-This package provides a Python wrapper around BoardGameGeek XML API2 calls and returns the results in JSON format.
+This package provides a Python wrapper around BoardGameGeek XML API2 calls and returns the results in JSON string format.
 
 # Uses
 
