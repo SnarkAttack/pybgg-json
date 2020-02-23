@@ -1,4 +1,6 @@
+import sys
 import setuptools
+from setuptools.command.test import test as TestCommand
     
 class PyTest(TestCommand):
     def finalize_options(self):

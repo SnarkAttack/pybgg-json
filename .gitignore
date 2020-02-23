@@ -1,4 +1,6 @@
 Pipfile*
 *.xml
+*.pyc
 .DS_Store
 .vscode/
+*.egg-info
