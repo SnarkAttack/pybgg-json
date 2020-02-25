@@ -77,4 +77,4 @@ def test_thing_items_request_basic():
 
 def test_thing_items_request_all():
     bgg_int = PyBggInterface()
-    assert check_json(bgg_int.thing_items_request(id=266192, versions=1, videos=1, stats=1, historical=0, marketplace=1, comments=1, ratingcomments=1)) == True
+    assert check_json(bgg_int.thing_items_request(id=237182, versions=1, videos=1, stats=1, historical=0, marketplace=1, comments=1, ratingcomments=1)) == True
