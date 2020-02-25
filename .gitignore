@@ -4,3 +4,5 @@ Pipfile*
 .DS_Store
 .vscode/
 *.egg-info
+.eggs
+dist/
