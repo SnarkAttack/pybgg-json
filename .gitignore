@@ -6,3 +6,4 @@ Pipfile*
 *.egg-info
 .eggs
 dist/
+*.save
