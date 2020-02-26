@@ -2,7 +2,7 @@ from pybgg_json.pybgg_json import PyBggInterface
 import json
 import unittest
 
-expected_keys_thing_items = {
+expected_keys = {
     'items': ['termsofuse', 'item'],
     # There are actually multiple fields that use item as a keyword, so this combines all seen
     'item': ['type', 'id', 'thumbnail', 'image', 'name', 'description', 'yearpublished',
@@ -22,7 +22,7 @@ expected_keys_thing_items = {
              'href', 'title'],
     'boardgamecategory': ['id', 'value'],
     'boardgamemechanic': ['id', 'value'],
-    'boardgamefamily': ['id', 'value'],
+    'boardgamefamily': ['id', 'value', 'inbound'],
     'boardgameexpansion': ['id', 'value'],
     'boardgamedesigner': ['id', 'value'],
     'boardgameartist': ['id', 'value'],
@@ -46,15 +46,15 @@ expected_keys_thing_items = {
     'family': ['id', 'name', 'friendlyname', 'value', 'bayesaverage'],
 }
 
-def check_all_element_data(elem, parent_key):
 
+def check_all_element_data(elem, parent_key):
     if parent_key is None:
         return True
 
     if type(elem) != dict:
         return True
 
-    return all(item in expected_keys_thing_items.get(parent_key, {}) for item in elem.keys())
+    return all(item in expected_keys.get(parent_key, {}) for item in elem.keys())
 
 # All we can do with these tests (because different games will have different fields and values and many can change
 # over time) is to check that we expect every key value that comes back for a dictionary
@@ -78,3 +78,8 @@ def test_thing_items_request_basic():
 def test_thing_items_request_all():
     bgg_int = PyBggInterface()
     assert check_json(bgg_int.thing_items_request(id=237182, versions=1, videos=1, stats=1, historical=0, marketplace=1, comments=1, ratingcomments=1)) == True
+
+def test_family_items_request_basic():
+    bgg_int = PyBggInterface()
+    assert check_json(bgg_int.family_items_request(id=55566)) == True
+
