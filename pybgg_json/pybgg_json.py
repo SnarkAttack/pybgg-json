@@ -28,9 +28,22 @@ class PyBggInterface(object):
 
         return json.dumps(pybgg_utils._generate_dict_from_element_tree(root))
 
+    def family_items_request(self, id, family_type=''):
+
+        family_items_url = (
+                    f"family?id={id}&type={family_type}"
+        )
+
+        root = pybgg_utils._make_request(family_items_url)
+
+        print(pybgg_utils._personal_pretty_print(pybgg_utils._generate_dict_from_element_tree(root)))
+
+        return json.dumps(pybgg_utils._generate_dict_from_element_tree(root))
+
 if __name__ == "__main__":
     
     
     bgg_interface = PyBggInterface()
     
-    bgg_interface.thing_items_request(id=266192, versions=1, videos=1, stats=1, historical=1, marketplace=1, comments=1, ratingcomments=1)
+    #bgg_interface.thing_items_request(id=266192, versions=1, videos=1, stats=1, historical=1, marketplace=1, comments=1, ratingcomments=1)
+    bgg_interface.family_items_request(id=266192)
