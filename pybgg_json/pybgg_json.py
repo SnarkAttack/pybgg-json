@@ -9,7 +9,7 @@ min_date = datetime.date.min.strftime("%Y-%m-%d")
 max_date = datetime.date.max.strftime("%Y-%m-%d")
 
 class PyBggInterface(object):
-    
+
     def __init__(self, cache=PyBggCache()):
         self.cache = cache
 
@@ -44,7 +44,6 @@ class PyBggInterface(object):
         )
 
         root = pybgg_utils._make_request(forum_list_url)
-        print(pybgg_utils._personal_pretty_print(pybgg_utils._generate_dict_from_element_tree(root)))
 
         return json.dumps(pybgg_utils._generate_dict_from_element_tree(root))
 
@@ -55,6 +54,19 @@ class PyBggInterface(object):
         )
 
         root = pybgg_utils._make_request(forum_url)
+
+        return json.dumps(pybgg_utils._generate_dict_from_element_tree(root))
+
+    def thread_request(self, id, min_article_id=0, min_article_date='', count=-1, username=''):
+
+        thread_url = (
+                    f"thread?id={id}&minarticleid={min_article_id}&minarticledate={min_article_date}"
+        )
+
+        if count != -1:
+            thread_url += f"&count={count}"
+
+        root = pybgg_utils._make_request(thread_url)
 
         return json.dumps(pybgg_utils._generate_dict_from_element_tree(root))
 
