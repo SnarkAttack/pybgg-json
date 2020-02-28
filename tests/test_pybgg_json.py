@@ -44,6 +44,9 @@ expected_keys = {
     'rank': ['subtype'],
     'subtype': ['id', 'name', 'friendlyname', 'value', 'bayesaverage'],
     'family': ['id', 'name', 'friendlyname', 'value', 'bayesaverage'],
+    'forum': ['id', 'title', 'numthreads', 'numposts', 'lastpostdate', 'noposting', 'termsofuse', 'threads'],
+    'threads': ['thread'],
+    'thread': ['id', 'subject', 'author', 'numarticles', 'postdate', 'lastpostdate'],
 }
 
 
@@ -66,20 +69,27 @@ def check_elem(elem, parent_key):
             return check_elem(item, parent_key)
     else:
         return True
-    
+
 def check_json(json_str):
     bgg_dict = json.loads(json_str)
     return check_elem(bgg_dict, None)
 
 def test_thing_items_request_basic():
     bgg_int = PyBggInterface()
-    assert check_json(bgg_int.thing_items_request(id=266192)) == True
+    assert check_json(bgg_int.thing_item_request(id=266192)) == True
 
 def test_thing_items_request_all():
     bgg_int = PyBggInterface()
-    assert check_json(bgg_int.thing_items_request(id=237182, versions=1, videos=1, stats=1, historical=0, marketplace=1, comments=1, ratingcomments=1)) == True
+    assert check_json(bgg_int.thing_item_request(id=237182, versions=1, videos=1, stats=1, historical=0, marketplace=1, comments=1, ratingcomments=1)) == True
 
 def test_family_items_request_basic():
     bgg_int = PyBggInterface()
-    assert check_json(bgg_int.family_items_request(id=55566)) == True
+    assert check_json(bgg_int.family_item_request(id=55566)) == True
 
+def test_forum_list_request_basic():
+    bgg_int = PyBggInterface()
+    assert check_json(bgg_int.forum_list_request(id=19)) == True
+
+def test_forum_list_request_all():
+    bgg_int = PyBggInterface()
+    assert check_json(bgg_int.forum_list_request(id=974655, page=18)) == True

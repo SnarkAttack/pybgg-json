@@ -13,7 +13,7 @@ class PyBggInterface(object):
     def __init__(self, cache=PyBggCache()):
         self.cache = cache
 
-    def thing_items_request(self, id, thing_type='', versions=0, videos=0, stats=0, historical=0, 
+    def thing_item_request(self, id, thing_type='', versions=0, videos=0, stats=0, historical=0, 
                             marketplace=0, comments=0, ratingcomments=0, page=1, page_size=100, 
                             date_from=min_date, date_to=max_date):
         
@@ -28,7 +28,7 @@ class PyBggInterface(object):
 
         return json.dumps(pybgg_utils._generate_dict_from_element_tree(root))
 
-    def family_items_request(self, id, family_type=''):
+    def family_item_request(self, id, family_type=''):
 
         family_items_url = (
                     f"family?id={id}&type={family_type}"
@@ -37,6 +37,16 @@ class PyBggInterface(object):
         root = pybgg_utils._make_request(family_items_url)
 
         print(pybgg_utils._personal_pretty_print(pybgg_utils._generate_dict_from_element_tree(root)))
+
+        return json.dumps(pybgg_utils._generate_dict_from_element_tree(root))
+
+    def forum_list_request(self, id, page=1):
+
+        forum_list_url = (
+                    f"forum?id={id}&page={page}"
+        )
+
+        root = pybgg_utils._make_request(forum_list_url)
 
         return json.dumps(pybgg_utils._generate_dict_from_element_tree(root))
 
