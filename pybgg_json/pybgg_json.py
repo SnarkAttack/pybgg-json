@@ -16,7 +16,6 @@ class PyBggInterface(object):
     def thing_item_request(self, id, thing_type='', versions=0, videos=0, stats=0, historical=0, 
                             marketplace=0, comments=0, ratingcomments=0, page=1, page_size=100, 
                             date_from=min_date, date_to=max_date):
-        
         # Date from and date to are not currently supported by BoardGameGeek
         thing_items_url = (
                     f"thing?id={id}&thing_type={thing_type}&versions={versions}&videos={videos}&"
@@ -38,13 +37,24 @@ class PyBggInterface(object):
 
         return json.dumps(pybgg_utils._generate_dict_from_element_tree(root))
 
-    def forum_list_request(self, id, page=1):
+    def forum_list_request(self, id, type='thing'):
 
         forum_list_url = (
-                    f"forum?id={id}&page={page}"
+                    f"forumlist?id={id}&type={type}"
         )
 
         root = pybgg_utils._make_request(forum_list_url)
+        print(pybgg_utils._personal_pretty_print(pybgg_utils._generate_dict_from_element_tree(root)))
+
+        return json.dumps(pybgg_utils._generate_dict_from_element_tree(root))
+
+    def forum_request(self, id, page=1):
+
+        forum_url = (
+                    f"forum?id={id}&page={page}"
+        )
+
+        root = pybgg_utils._make_request(forum_url)
 
         return json.dumps(pybgg_utils._generate_dict_from_element_tree(root))
 

@@ -44,7 +44,8 @@ expected_keys = {
     'rank': ['subtype'],
     'subtype': ['id', 'name', 'friendlyname', 'value', 'bayesaverage'],
     'family': ['id', 'name', 'friendlyname', 'value', 'bayesaverage'],
-    'forum': ['id', 'title', 'numthreads', 'numposts', 'lastpostdate', 'noposting', 'termsofuse', 'threads'],
+    'forums': ['type', 'id', 'termsofuse', 'forum'],
+    'forum': ['id', 'title', 'numthreads', 'numposts', 'lastpostdate', 'noposting', 'termsofuse', 'threads', 'groupid', 'description'],
     'threads': ['thread'],
     'thread': ['id', 'subject', 'author', 'numarticles', 'postdate', 'lastpostdate'],
 }
@@ -86,10 +87,22 @@ def test_family_items_request_basic():
     bgg_int = PyBggInterface()
     assert check_json(bgg_int.family_item_request(id=55566)) == True
 
-def test_forum_list_request_basic():
+def test_forum_list_basic():
     bgg_int = PyBggInterface()
-    assert check_json(bgg_int.forum_list_request(id=19)) == True
+    assert check_json(bgg_int.forum_list_request(id=194182)) == True
 
-def test_forum_list_request_all():
+def test_forum_list_thing():
     bgg_int = PyBggInterface()
-    assert check_json(bgg_int.forum_list_request(id=974655, page=18)) == True
+    assert check_json(bgg_int.forum_list_request(id=224517, type='thing')) == True
+
+def test_forum_list_family():
+    bgg_int = PyBggInterface()
+    assert check_json(bgg_int.forum_list_request(id=46915, type='family')) == True
+
+def test_forum_request_basic():
+    bgg_int = PyBggInterface()
+    assert check_json(bgg_int.forum_request(id=19)) == True
+
+def test_forum_request_all():
+    bgg_int = PyBggInterface()
+    assert check_json(bgg_int.forum_request(id=974655, page=18)) == True
