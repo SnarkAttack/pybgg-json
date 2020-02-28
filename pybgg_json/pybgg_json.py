@@ -44,7 +44,6 @@ class PyBggInterface(object):
         )
 
         root = pybgg_utils._make_request(forum_list_url)
-        print(pybgg_utils._personal_pretty_print(pybgg_utils._generate_dict_from_element_tree(root)))
 
         return json.dumps(pybgg_utils._generate_dict_from_element_tree(root))
 
