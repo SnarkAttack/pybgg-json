@@ -36,8 +36,6 @@ class PyBggInterface(object):
 
         root = pybgg_utils._make_request(family_items_url)
 
-        print(pybgg_utils._personal_pretty_print(pybgg_utils._generate_dict_from_element_tree(root)))
-
         return json.dumps(pybgg_utils._generate_dict_from_element_tree(root))
 
 if __name__ == "__main__":
