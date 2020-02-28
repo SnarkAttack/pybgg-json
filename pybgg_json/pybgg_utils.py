@@ -5,7 +5,7 @@ base_api_url = "https://www.boardgamegeek.com/xmlapi2/"
 
 
 pivot_list = ['type']
-no_mod_list = ['item']
+no_mod_list = ['item', 'forums']
 condense_lists_tags = ['item', 'results']
 prevent_condense_tags = ['poll', 'result']
 
@@ -24,7 +24,6 @@ def _personal_pretty_print(elem, indent=0):
             rec_str += " "*(indent)+"],"
         else:
             rec_str += elem
-            
         return rec_str
 
 # BGG results return a lot of xml in repeating tags (like <link>). To ease usage (and because python dicts
@@ -33,7 +32,7 @@ def _personal_pretty_print(elem, indent=0):
 def _update_and_merge_dict(dict1, dict2):
     keys1 = dict1.keys()
     keys2 = dict2.keys()
-    
+
     for key in keys2:
         if key in keys1:
             if type(dict1[key]) == list:
@@ -51,19 +50,12 @@ def _dict_w_ele_rem(dic, ele):
 # Returns root of ElementTree
 def _make_request(request_url):
     full_url = base_api_url + request_url
-    print(full_url)
     r = requests.get(full_url)
-    
-    f = open('wingspan_mid.xml', 'w')
-    f.write(r.text)
-    f.close()
-    
     return ElementTree.fromstring(r.text)
 
 def _open_xml_request_file(file_path):
-    
     return ElementTree.parse(file_path).getroot()
-    
+
 def _generate_dict_from_element_tree(root):
     # Make copy so we aren't actually modifying element tree data
     root_dict = root.attrib.copy()
