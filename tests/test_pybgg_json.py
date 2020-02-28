@@ -44,9 +44,13 @@ expected_keys = {
     'rank': ['subtype'],
     'subtype': ['id', 'name', 'friendlyname', 'value', 'bayesaverage'],
     'family': ['id', 'name', 'friendlyname', 'value', 'bayesaverage'],
-    'forum': ['id', 'title', 'numthreads', 'numposts', 'lastpostdate', 'noposting', 'termsofuse', 'threads'],
+    'forums': ['type', 'id', 'termsofuse', 'forum'],
+    'forum': ['id', 'title', 'numthreads', 'numposts', 'lastpostdate', 'noposting', 'termsofuse', 'threads', 'groupid', 'description'],
     'threads': ['thread'],
-    'thread': ['id', 'subject', 'author', 'numarticles', 'postdate', 'lastpostdate'],
+    'thread': ['id', 'subject', 'author', 'numarticles', 'postdate', 'lastpostdate', 'termsofuse', 'articles', 'link'],
+    'articles': ['article'],
+    # TODO: Check if article date field gets based off of postdate or editdate
+    'article': ['id', 'username', 'link', 'postdate', 'editdate', 'numedits', 'subject', 'body'],
 }
 
 
@@ -86,10 +90,63 @@ def test_family_items_request_basic():
     bgg_int = PyBggInterface()
     assert check_json(bgg_int.family_item_request(id=55566)) == True
 
-def test_forum_list_request_basic():
+def test_forum_list_basic():
     bgg_int = PyBggInterface()
-    assert check_json(bgg_int.forum_list_request(id=19)) == True
+    assert check_json(bgg_int.forum_list_request(id=194182)) == True
 
-def test_forum_list_request_all():
+def test_forum_list_thing():
     bgg_int = PyBggInterface()
-    assert check_json(bgg_int.forum_list_request(id=974655, page=18)) == True
+    assert check_json(bgg_int.forum_list_request(id=224517, type='thing')) == True
+
+def test_forum_list_family():
+    bgg_int = PyBggInterface()
+    assert check_json(bgg_int.forum_list_request(id=46915, type='family')) == True
+
+def test_forum_request_basic():
+    bgg_int = PyBggInterface()
+    assert check_json(bgg_int.forum_request(id=19)) == True
+
+def test_forum_request_all():
+    bgg_int = PyBggInterface()
+    assert check_json(bgg_int.forum_request(id=974655, page=18)) == True
+
+def test_thread_request_basic():
+    bgg_int = PyBggInterface()
+    assert check_json(bgg_int.thread_request(id=2375680)) == True
+
+def test_thread_request_min_article_id():
+    bgg_int = PyBggInterface()
+
+    min_article_id_request = bgg_int.thread_request(id=2352640, min_article_id=33837087)
+    assert check_json(min_article_id_request) == True
+
+    full_thread_request = bgg_int.thread_request(id=2352640)
+
+    assert (len(json.loads(full_thread_request)['thread']['articles']['article']) - len(json.loads(min_article_id_request)['thread']['articles']['article'])) == 4
+
+def test_thread_request_min_article_date_no_hms():
+    bgg_int = PyBggInterface()
+
+    min_article_date_request = bgg_int.thread_request(id=2343582, min_article_date='2020-01-07')
+    assert check_json(min_article_date_request) == True
+
+    full_thread_request = bgg_int.thread_request(id=2343582)
+
+    assert (len(json.loads(full_thread_request)['thread']['articles']['article']) - len(json.loads(min_article_date_request)['thread']['articles']['article'])) == 6
+
+def test_thread_request_min_article_date_hms():
+    bgg_int = PyBggInterface()
+
+    min_article_date_request = bgg_int.thread_request(id=2343582, min_article_date='2020-01-07%2006:07:08')
+    assert check_json(min_article_date_request) == True
+
+    full_thread_request = bgg_int.thread_request(id=2343582)
+
+    assert (len(json.loads(full_thread_request)['thread']['articles']['article']) - len(json.loads(min_article_date_request)['thread']['articles']['article'])) == 7
+
+def test_thread_request_count():
+    bgg_int = PyBggInterface()
+
+    count_request = bgg_int.thread_request(id=2330040, count=2)
+    assert check_json(count_request) == True
+    assert len(json.loads(count_request)['thread']['articles']['article']) == 2
