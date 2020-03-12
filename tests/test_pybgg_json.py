@@ -60,6 +60,11 @@ expected_keys = {
     'guild': ['id', 'name'],
     'hot': ['domain', 'item'],
     'top': ['domain', 'item'],
+    'guild': ['id', 'name', 'created', 'termsofuse', 'category', 'website', 'manager', 'description',
+                'location', 'members'],
+    'location': ['addr1', 'addr2', 'city', 'stateorprovince', 'postalcode', 'country'],
+    'members': ['count', 'page', 'member'],
+    'member': ['name', 'date'],
 }
 
 
@@ -189,3 +194,11 @@ def test_user_request_top():
 def test_user_request_page():
     bgg_int = PyBggInterface()
     assert check_json(bgg_int.user_request(name='mcpat0226', page=2)) == True
+
+def test_guild_request_basic():
+    bgg_int = PyBggInterface()
+    assert check_json(bgg_int.guild_request(id=1622)) == True
+
+def test_guild_request_members():
+    bgg_int = PyBggInterface()
+    assert check_json(bgg_int.guild_request(id=1622, members=1)) == True

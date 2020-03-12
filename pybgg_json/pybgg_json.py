@@ -74,10 +74,21 @@ class PyBggInterface(object):
     def user_request(self, name, buddies=0, guilds=0, hot=0, top=0, domain='boardgame', page=1):
 
         user_url = (
-                  f"user?id={id}&buddies={buddies}&guilds={guilds}&hot={hot}&top={top}&domain={domain}&page={page}"
+                  f"user?name={name}&buddies={buddies}&guilds={guilds}&hot={hot}&top={top}&domain={domain}&page={page}"
         )
 
         root = pybgg_utils._make_request(user_url)
 
         return json.dumps(pybgg_utils._generate_dict_from_element_tree(root))
+
+    def guild_request(self, id, members=0, sorttype='username', page=1):
+
+        guild_url = (
+                   f"guild?id={id}&members={members}&sort={sorttype}&page={page}"
+        )
+
+        root = pybgg_utils._make_request(guild_url)
+
+        return json.dumps(pybgg_utils._generate_dict_from_element_tree(root))
+
 
