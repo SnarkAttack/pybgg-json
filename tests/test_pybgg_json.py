@@ -17,7 +17,7 @@ expected_keys = {
     'results': ['numplayers', 'result'],
     'result': ['value', 'numvotes'],
     # This one gets a bit messy as well
-    'link': ['boardgamecategory', 'boardgamemechanic', 'boardgamefamily', 'boardgameexpansion', 
+    'link': ['boardgamecategory', 'boardgamemechanic', 'boardgamefamily', 'boardgameexpansion',
              'boardgamedesigner', 'boardgameartist', 'boardgamepublisher', 'boardgameversion', 'language',
              'href', 'title'],
     'boardgamecategory': ['id', 'value'],
@@ -51,6 +51,13 @@ expected_keys = {
     'articles': ['article'],
     # TODO: Check if article date field gets based off of postdate or editdate
     'article': ['id', 'username', 'link', 'postdate', 'editdate', 'numedits', 'subject', 'body'],
+    'user': ['id', 'name', 'termsofuse', 'firstname', 'lastname', 'avatarlink', 'yearregistered', 'lastlogin',
+                'stateorprovince', 'country', 'webaddress', 'xboxaccount', 'wiiaccount', 'psnaccount', 'battlenetaccount',
+                'steamaccount', 'tradeating', 'marketrating', 'buddies', 'guilds'],
+    'buddies': ['total', 'page', 'buddy'],
+    'buddy': ['id', 'name'],
+    'guilds': ['total', 'page', 'guild'],
+    'guild': ['id', 'name'],
 }
 
 
@@ -96,6 +103,7 @@ def test_forum_list_basic():
 
 def test_forum_list_thing():
     bgg_int = PyBggInterface()
+
     assert check_json(bgg_int.forum_list_request(id=224517, type='thing')) == True
 
 def test_forum_list_family():
@@ -150,3 +158,21 @@ def test_thread_request_count():
     count_request = bgg_int.thread_request(id=2330040, count=2)
     assert check_json(count_request) == True
     assert len(json.loads(count_request)['thread']['articles']['article']) == 2
+
+def test_user_request_basic():
+    bgg_int = PyBggInterface()
+    assert check_json(bgg_int.user_request(name='mcpat0226')) == True
+
+def test_user_request_buddies():
+    bgg_int = PyBggInterface()
+    assert check_json(bgg_int.user_request(name='DrFlanagan', buddies=1)) == True
+
+def test_user_request_guilds():
+    bgg_int = PyBggInterface()
+
+    assert check_json(bgg_int.user_request(name='mcpat0226', guilds=1)) == True
+
+def test_user_request_hot():
+    bgg_int = PyBggInterface()
+
+    assert check_json(bgg_int.user_request(name='DrFlanagan', hot=1)) == True
