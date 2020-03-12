@@ -69,6 +69,8 @@ class PyBggInterface(object):
 
         root = pybgg_utils._make_request(thread_url)
 
+        return json.dumps(pybgg_utils._generate_dict_from_element_tree(root))
+
     def user_request(self, name, buddies=0, guilds=0, hot=0, top=0, domain='boardgame', page=1):
 
         user_url = (
