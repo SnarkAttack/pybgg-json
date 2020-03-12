@@ -8,7 +8,7 @@ expected_keys = {
     'item': ['type', 'id', 'thumbnail', 'image', 'name', 'description', 'yearpublished',
              'minplayers', 'maxplayers', 'poll', 'playingtime', 'productcode', 'minplaytime', 'maxplaytime',
              'minage', 'link', 'width', 'length', 'depth', 'weight', 'versions', 'videos',
-             'comments', 'ratingcomments', 'statistics', 'marketplacelistings'],
+             'comments', 'ratingcomments', 'statistics', 'marketplacelistings', 'rank'],
     'name': ['primary', 'alternate'],
     'primary': ['sortindex', 'value'],
     'alternate': ['sortindex', 'value'],
@@ -53,11 +53,13 @@ expected_keys = {
     'article': ['id', 'username', 'link', 'postdate', 'editdate', 'numedits', 'subject', 'body'],
     'user': ['id', 'name', 'termsofuse', 'firstname', 'lastname', 'avatarlink', 'yearregistered', 'lastlogin',
                 'stateorprovince', 'country', 'webaddress', 'xboxaccount', 'wiiaccount', 'psnaccount', 'battlenetaccount',
-                'steamaccount', 'tradeating', 'marketrating', 'buddies', 'guilds'],
+                'steamaccount', 'traderating', 'marketrating', 'buddies', 'guilds', 'hot', 'top'],
     'buddies': ['total', 'page', 'buddy'],
     'buddy': ['id', 'name'],
     'guilds': ['total', 'page', 'guild'],
     'guild': ['id', 'name'],
+    'hot': ['domain', 'item'],
+    'top': ['domain', 'item'],
 }
 
 
@@ -67,6 +69,9 @@ def check_all_element_data(elem, parent_key):
 
     if type(elem) != dict:
         return True
+
+    #print(elem.keys())
+    #print(expected_keys.get(parent_key, {}))
 
     return all(item in expected_keys.get(parent_key, {}) for item in elem.keys())
 
@@ -176,3 +181,11 @@ def test_user_request_hot():
     bgg_int = PyBggInterface()
 
     assert check_json(bgg_int.user_request(name='DrFlanagan', hot=1)) == True
+
+def test_user_request_top():
+    bgg_int = PyBggInterface()
+    assert check_json(bgg_int.user_request(name='mcpat0226', top=1)) == True
+
+def test_user_request_page():
+    bgg_int = PyBggInterface()
+    assert check_json(bgg_int.user_request(name='mcpat0226', page=2)) == True
