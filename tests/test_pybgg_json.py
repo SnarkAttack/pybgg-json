@@ -8,7 +8,8 @@ expected_keys = {
     'item': ['type', 'id', 'thumbnail', 'image', 'name', 'description', 'yearpublished',
              'minplayers', 'maxplayers', 'poll', 'playingtime', 'productcode', 'minplaytime', 'maxplaytime',
              'minage', 'link', 'width', 'length', 'depth', 'weight', 'versions', 'videos',
-             'comments', 'ratingcomments', 'statistics', 'marketplacelistings', 'rank'],
+             'comments', 'ratingcomments', 'statistics', 'marketplacelistings', 'rank', 'objecttype',
+             'objectid', 'subtypes'],
     'name': ['primary', 'alternate'],
     'primary': ['sortindex', 'value'],
     'alternate': ['sortindex', 'value'],
@@ -65,6 +66,11 @@ expected_keys = {
     'location': ['addr1', 'addr2', 'city', 'stateorprovince', 'postalcode', 'country'],
     'members': ['count', 'page', 'member'],
     'member': ['name', 'date'],
+    'plays': ['username', 'userid', 'total', 'page', 'termsofuse', 'play'],
+    'play': ['id', 'date', 'quantity', 'length', 'incomplete', 'nowinstats', 'location', 'item', 'players'],
+    'subtypes': ['subtype'],
+    'players': ['player'],
+    'player': ['username', 'userid', 'name', 'startposition', 'color', 'score', 'new', 'rating', 'win'],
 }
 
 
@@ -75,8 +81,9 @@ def check_all_element_data(elem, parent_key):
     if type(elem) != dict:
         return True
 
-    #print(elem.keys())
-    #print(expected_keys.get(parent_key, {}))
+    # print(parent_key)
+    # print(elem.keys())
+    # print(expected_keys.get(parent_key, {}))
 
     return all(item in expected_keys.get(parent_key, {}) for item in elem.keys())
 
@@ -202,3 +209,7 @@ def test_guild_request_basic():
 def test_guild_request_members():
     bgg_int = PyBggInterface()
     assert check_json(bgg_int.guild_request(id=1622, members=1)) == True
+    
+def test_plays_basic_request():
+    bgg_int = PyBggInterface()
+    assert check_json(bgg_int.plays_request(username='mcpat0226')) == True
