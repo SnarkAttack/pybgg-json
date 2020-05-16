@@ -5,8 +5,8 @@ import xml.etree.ElementTree as ElementTree
 import pybgg_json.pybgg_utils as pybgg_utils
 from pybgg_json.pybgg_cache import PyBggCache
 
-min_date = datetime.date.min.strftime("%Y-%m-%d")
-max_date = datetime.date.max.strftime("%Y-%m-%d")
+MIN_DATE = datetime.date.min.strftime("%Y-%m-%d")
+MAX_DATE = datetime.date.max.strftime("%Y-%m-%d")
 
 class PyBggInterface(object):
 
@@ -15,7 +15,7 @@ class PyBggInterface(object):
 
     def thing_item_request(self, id, thing_type='', versions=0, videos=0, stats=0, historical=0, 
                             marketplace=0, comments=0, ratingcomments=0, page=1, page_size=100, 
-                            date_from=min_date, date_to=max_date):
+                            date_from=MIN_DATE, date_to=MAX_DATE):
 
         # Date from and date to are not currently supported by BoardGameGeek
         thing_items_url = (
@@ -74,7 +74,8 @@ class PyBggInterface(object):
     def user_request(self, name, buddies=0, guilds=0, hot=0, top=0, domain='boardgame', page=1):
 
         user_url = (
-                  f"user?name={name}&buddies={buddies}&guilds={guilds}&hot={hot}&top={top}&domain={domain}&page={page}"
+                  f"user?name={name}&buddies={buddies}&guilds={guilds}&hot={hot}&top={top}&"
+                  f"domain={domain}&page={page}"
         )
 
         root = pybgg_utils._make_request(user_url)
@@ -90,5 +91,24 @@ class PyBggInterface(object):
         root = pybgg_utils._make_request(guild_url)
 
         return json.dumps(pybgg_utils._generate_dict_from_element_tree(root))
+    
+    # Must use either username or id AND type
+    def plays_request(self, username=None, id=None, type=None, mindate=MIN_DATE, 
+                      maxdate=MAX_DATE, subtype='boardgame', page=1):
+        
+        if username is None and (id is None or type is None):
+            return {}
+        else:
+            if username is not None:
+                identifier = f"username={username}"
+            else:
+                identifier = f"id={id}&type={type}"
+                
+        plays_url = (
+                    f"plays?{identifier}&mindate={mindate}&maxdate={maxdate}&subtype={subtype}&"
+                    f"page={page}"
+        )
 
-
+        root = pybgg_utils._make_request(plays_url)
+        
+        return json.dumps(pybgg_utils._generate_dict_from_element_tree(root))
