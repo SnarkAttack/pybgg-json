@@ -112,3 +112,24 @@ class PyBggInterface(object):
         root = pybgg_utils._make_request(plays_url)
         
         return json.dumps(pybgg_utils._generate_dict_from_element_tree(root))
+    
+    def collection_request(self, username, subtype='boardgame', exclude_subtype=None, id=None,
+                           brief=None, stats=None, own=None, rated=None, playerd=None, comment=None,
+                           trade=None, want=None, wishlist=None, wishlist_priority=None, preordered=None,
+                           wanttoplay=None, wanttobuy=None, prevowned=None, hasparts=None, wantparts=None,
+                           minrating=None, rating=None, minbggrating=None, bggrating=None, minplays=None,
+                           maxplays=None, showprivate=None, collid=None, modifiedsince=MIN_DATE):
+        
+        collection_url = (
+                    f"collection?username={username}&subtype={subtype}"
+        )
+        
+        for arg, arg_val in locals().items():
+            if arg_val is not None:
+                collection_url += f"{arg}={arg_val}&"
+        collection_url += f"modifiedsince={modifiedsince}"
+            
+        
+        root = pybgg_utils._make_request(collection_url)
+        
+        return json.dumps(pybgg_utils._generate_dict_from_element_tree(root))

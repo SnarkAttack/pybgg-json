@@ -3,13 +3,13 @@ import json
 import unittest
 
 expected_keys = {
-    'items': ['termsofuse', 'item'],
+    'items': ['termsofuse', 'item', 'totalitems', 'pubdate'],
     # There are actually multiple fields that use item as a keyword, so this combines all seen
     'item': ['type', 'id', 'thumbnail', 'image', 'name', 'description', 'yearpublished',
              'minplayers', 'maxplayers', 'poll', 'playingtime', 'productcode', 'minplaytime', 'maxplaytime',
              'minage', 'link', 'width', 'length', 'depth', 'weight', 'versions', 'videos',
              'comments', 'ratingcomments', 'statistics', 'marketplacelistings', 'rank', 'objecttype',
-             'objectid', 'subtypes'],
+             'objectid', 'subtypes', 'subtype', 'collid', 'status', 'numplays'],
     'name': ['primary', 'alternate'],
     'primary': ['sortindex', 'value'],
     'alternate': ['sortindex', 'value'],
@@ -71,6 +71,7 @@ expected_keys = {
     'subtypes': ['subtype'],
     'players': ['player'],
     'player': ['username', 'userid', 'name', 'startposition', 'color', 'score', 'new', 'rating', 'win'],
+    'status': ['own', 'prevowned', 'fortrade', 'want', 'wanttoplay', 'wanttobuy', 'wishlist', 'preordered', 'lastmodified'],
 }
 
 
@@ -81,9 +82,9 @@ def check_all_element_data(elem, parent_key):
     if type(elem) != dict:
         return True
 
-    # print(parent_key)
-    # print(elem.keys())
-    # print(expected_keys.get(parent_key, {}))
+    print(parent_key)
+    print(elem.keys())
+    print(expected_keys.get(parent_key, {}))
 
     return all(item in expected_keys.get(parent_key, {}) for item in elem.keys())
 
@@ -213,3 +214,7 @@ def test_guild_request_members():
 def test_plays_basic_request():
     bgg_int = PyBggInterface()
     assert check_json(bgg_int.plays_request(username='mcpat0226')) == True
+    
+def test_collection_request_basic():
+    bgg_int = PyBggInterface()
+    assert check_json(bgg_int.collection_request(username='mcpat0226')) == True
