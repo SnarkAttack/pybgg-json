@@ -213,3 +213,7 @@ def test_guild_request_members():
 def test_plays_basic_request():
     bgg_int = PyBggInterface()
     assert check_json(bgg_int.plays_request(username='mcpat0226')) == True
+    
+def test_collection_request_basic():
+    bgg_int = PyBggInterface()
+    assert check_json(bgg_int.collection_request(username='mcpat0226')) == True
