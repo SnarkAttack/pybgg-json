@@ -1,5 +1,6 @@
 import requests
 import xml.etree.ElementTree as ElementTree
+from time import sleep
 
 base_api_url = "https://www.boardgamegeek.com/xmlapi2/"
 
@@ -7,7 +8,7 @@ base_api_url = "https://www.boardgamegeek.com/xmlapi2/"
 pivot_list = ['type']
 no_mod_list = ['item', 'forums']
 condense_lists_tags = ['item', 'results']
-prevent_condense_tags = ['poll', 'result']
+prevent_condense_tags = ['poll', 'result', 'name']
 
 
 def _personal_pretty_print(elem, indent=0):
@@ -50,7 +51,16 @@ def _dict_w_ele_rem(dic, ele):
 # Returns root of ElementTree
 def _make_request(request_url):
     full_url = base_api_url + request_url
+    sleep_len_s = 5
+    sleep_attempts = 0
+    # HTTP Too Many Requests code
     r = requests.get(full_url)
+    while r.status_code == 429 and sleep_attempts < 6:
+        print(f"Sleeping {sleep_len_s}")
+        sleep(sleep_len_s)
+        r = requests.get(full_url)
+    if r.status_code == 200:
+        game_response = r.text
     return ElementTree.fromstring(r.text)
 
 def _open_xml_request_file(file_path):

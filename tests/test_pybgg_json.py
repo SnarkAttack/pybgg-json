@@ -71,7 +71,8 @@ expected_keys = {
     'subtypes': ['subtype'],
     'players': ['player'],
     'player': ['username', 'userid', 'name', 'startposition', 'color', 'score', 'new', 'rating', 'win'],
-    'status': ['own', 'prevowned', 'fortrade', 'want', 'wanttoplay', 'wanttobuy', 'wishlist', 'preordered', 'lastmodified'],
+    'status': ['own', 'prevowned', 'fortrade', 'want', 'wanttoplay', 'wanttobuy', 
+               'wishlist', 'preordered', 'lastmodified'],
 }
 
 
@@ -99,9 +100,8 @@ def check_elem(elem, parent_key):
     else:
         return True
 
-def check_json(json_str):
-    bgg_dict = json.loads(json_str)
-    return check_elem(bgg_dict, None)
+def check_json(json_dict):
+    return check_elem(json_dict, None)
 
 def test_thing_items_request_basic():
     bgg_int = PyBggInterface()
@@ -148,7 +148,7 @@ def test_thread_request_min_article_id():
 
     full_thread_request = bgg_int.thread_request(id=2352640)
 
-    assert (len(json.loads(full_thread_request)['thread']['articles']['article']) - len(json.loads(min_article_id_request)['thread']['articles']['article'])) == 4
+    assert (len((full_thread_request)['thread']['articles']['article']) - len((min_article_id_request)['thread']['articles']['article'])) == 4
 
 def test_thread_request_min_article_date_no_hms():
     bgg_int = PyBggInterface()
@@ -158,7 +158,7 @@ def test_thread_request_min_article_date_no_hms():
 
     full_thread_request = bgg_int.thread_request(id=2343582)
 
-    assert (len(json.loads(full_thread_request)['thread']['articles']['article']) - len(json.loads(min_article_date_request)['thread']['articles']['article'])) == 6
+    assert (len((full_thread_request)['thread']['articles']['article']) - len((min_article_date_request)['thread']['articles']['article'])) == 6
 
 def test_thread_request_min_article_date_hms():
     bgg_int = PyBggInterface()
@@ -168,14 +168,14 @@ def test_thread_request_min_article_date_hms():
 
     full_thread_request = bgg_int.thread_request(id=2343582)
 
-    assert (len(json.loads(full_thread_request)['thread']['articles']['article']) - len(json.loads(min_article_date_request)['thread']['articles']['article'])) == 7
+    assert (len((full_thread_request)['thread']['articles']['article']) - len((min_article_date_request)['thread']['articles']['article'])) == 7
 
 def test_thread_request_count():
     bgg_int = PyBggInterface()
 
     count_request = bgg_int.thread_request(id=2330040, count=2)
     assert check_json(count_request) == True
-    assert len(json.loads(count_request)['thread']['articles']['article']) == 2
+    assert len((count_request)['thread']['articles']['article']) == 2
 
 def test_user_request_basic():
     bgg_int = PyBggInterface()
