@@ -1,8 +1,18 @@
 import json
 import hashlib
 import os
+import time
+from .pybgg_utils import get_type_of_request
+
+HOUR_IN_SEC = 60*60
+DAY_IN_SEC = HOUR_IN_SEC*24
 
 class PyBggCache(object):
+    
+    refresh_times = {
+        'collection': DAY_IN_SEC,
+        'thing': 7*DAY_IN_SEC
+    }
 
     cache_dir = "pybgg_cache/"
     
@@ -10,14 +20,18 @@ class PyBggCache(object):
         
         self.cache_dir = cache_dir
         
-    def check_cache(self, file_name):
+    def check_cache(self, url):
         
-        full_path = os.path.join(self.cache_dir, file_name)
+        file_name = hashlib.md5(url.encode()).hexdigest()
+        file_path = os.path.join(self.cache_dir, file_name)
+        
+        if time.time() - os.path.getmtime(file_path) > self.refresh_times[get_type_of_request(url)]:
+            return None
  
-        if os.path.exists(full_path):
+        if os.path.exists(file_path):
             try:
                 results = None
-                with open(full_path, 'r') as f:
+                with open(file_path, 'r') as f:
                     results = json.load(f)
                 return results
             except:
@@ -25,11 +39,12 @@ class PyBggCache(object):
         else:
             return None
         
-    def cache_result(self, file_name, result_data):
+    def cache_result(self, url, result_data):
         
         if not os.path.exists(self.cache_dir):
             os.makedirs(self.cache_dir)
         
+        file_name = hashlib.md5(url.encode()).hexdigest()
         file_path = os.path.join(self.cache_dir, file_name)
         
         with open(file_path, 'w') as f:

@@ -16,18 +16,20 @@ class PyBggInterface(object):
         
     def make_request(self, url):
         if self.cache is not None:
-            file_name = hashlib.md5(url.encode()).hexdigest()
-            results = self.cache.check_cache(file_name)
+            results = self.cache.check_cache(url)
             if results is not None:
                 return results
             else:
                 root = pybgg_utils._make_request(url)
                 results = pybgg_utils._generate_dict_from_element_tree(root)
-                self.cache.cache_result(file_name, results)
+                self.cache.cache_result(url, results)
                 return results
         else:
             root = pybgg_utils._make_request(url)
-            results = pybgg_utils._generate_dict_from_element_tree(root)
+            if root is not None:
+                results = pybgg_utils._generate_dict_from_element_tree(root)
+            else:
+                return {}
             return results
             
             

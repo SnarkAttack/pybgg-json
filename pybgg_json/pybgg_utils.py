@@ -10,6 +10,10 @@ no_mod_list = ['item', 'forums']
 condense_lists_tags = ['item', 'results']
 prevent_condense_tags = ['poll', 'result', 'name']
 
+RETRY_STATUS_CODES = [429, 202]
+
+def get_type_of_request(url):
+    return url.split('?')[0].split('/')[-1]
 
 def _personal_pretty_print(elem, indent=0):
         rec_str = ""
@@ -53,14 +57,15 @@ def _make_request(request_url):
     full_url = base_api_url + request_url
     sleep_len_s = 5
     sleep_attempts = 0
+    max_attempts = 6
     # HTTP Too Many Requests code
     r = requests.get(full_url)
-    while r.status_code == 429 and sleep_attempts < 6:
-        print(f"Sleeping {sleep_len_s}")
+    while r.status_code in RETRY_STATUS_CODES and sleep_attempts < max_attempts:
         sleep(sleep_len_s)
         r = requests.get(full_url)
-    if r.status_code == 200:
-        game_response = r.text
+        sleep_attempts += 1
+    if sleep_attempts == max_attempts:
+        return None
     return ElementTree.fromstring(r.text)
 
 def _open_xml_request_file(file_path):
