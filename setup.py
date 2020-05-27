@@ -27,7 +27,7 @@ test_requirements = [
 
 setuptools.setup(
     name="pybgg-json",
-    version="0.0.3",
+    version="0.0.4",
     author="Patrick McQuay",
     author_email="patrick.mcquay@gmail.com",
     description="Python package to wrap BoardGameGeek XML API2 calls and produce JSON results",

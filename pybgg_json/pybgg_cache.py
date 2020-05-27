@@ -24,12 +24,11 @@ class PyBggCache(object):
         
         file_name = hashlib.md5(url.encode()).hexdigest()
         file_path = os.path.join(self.cache_dir, file_name)
-        
-        if time.time() - os.path.getmtime(file_path) > self.refresh_times[get_type_of_request(url)]:
-            return None
  
         if os.path.exists(file_path):
             try:
+                if time.time() - os.path.getmtime(file_path) > self.refresh_times[get_type_of_request(url)]:
+                    return None
                 results = None
                 with open(file_path, 'r') as f:
                     results = json.load(f)

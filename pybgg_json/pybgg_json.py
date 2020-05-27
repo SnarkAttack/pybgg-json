@@ -118,7 +118,7 @@ class PyBggInterface(object):
 
         return self.make_request(plays_url)
     
-    def collection_request(self, username, subtype='boardgame', exclude_subtype=None, id=None,
+    def collection_request(self, username, subtype='boardgame', excludesubtype=None, id=None,
                            brief=None, stats=None, own=None, rated=None, playerd=None, comment=None,
                            trade=None, want=None, wishlist=None, wishlist_priority=None, preordered=None,
                            wanttoplay=None, wanttobuy=None, prevowned=None, hasparts=None, wantparts=None,
